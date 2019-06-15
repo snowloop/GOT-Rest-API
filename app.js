@@ -1,15 +1,8 @@
 const express = require('express');
-
+const charactersRoutes = require('./api/routes/characters');
 const app = express();
 
-app.use((req,res,next)=>{
-res.status(200).json(
-  {
-    'message':'hello'
-  }
-)
 
-
-})
+app.use('/characters',charactersRoutes);
 
 module.exports = app;
