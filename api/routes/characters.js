@@ -75,9 +75,9 @@ router.post('/', (req, res, next) => {
           if (err) {
             next(err);
           } else {
-            res.status(200).json({
+            res.status(201).json({
               message: "character created",
-              [newId]: charactersDB[newId]
+              id: newId
             })
           }
         })

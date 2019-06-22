@@ -1,14 +1,1 @@
-{
-  "1": {
-    "firstName": "Arya",
-    "lastName": "Stark"
-  },
-  "2": {
-    "firstName": "Robert",
-    "lastName": "Baratheon"
-  },
-  "3": {
-    "firstName": "Eddard",
-    "lastName": "Stark"
-  }
-}
+{"1":{"firstName":"Arya","lastName":"Stark"},"2":{"firstName":"Robert","lastName":"Baratheon"},"3":{"firstName":"Eddard","lastName":"Stark"},"4":{"firstName":"Beric","lastName":"Dondarrion"}}
