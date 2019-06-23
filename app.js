@@ -11,7 +11,7 @@ mongoose.connect(uri.replace('<password>', 'dLiE4zdo4fM6uLEm'), {
     useNewUrlParser: true
   })
   .then(() => {
-    console.log("Good connection")
+    console.log("Connection with the database : OK")
   }).catch((err) => {
     console.log('Error during connection :' + err)
   });
