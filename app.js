@@ -1,13 +1,16 @@
+require('dotenv').config();
 const express = require('express');
+
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const charactersRoutes = require('./api/routes/characters');
 const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
-const MongoClient = require('mongodb').MongoClient;
 
-mongoose.connect(uri.replace('<password>', 'dLiE4zdo4fM6uLEm'), {
+console.log(process.env.DB_PASSWORD)
+console.log(typeof process.env.DB_PASSWORD)
+mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
     useNewUrlParser: true
   })
   .then(() => {
