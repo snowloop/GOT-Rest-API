@@ -8,8 +8,7 @@ const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
 
-console.log(process.env.DB_PASSWORD)
-console.log(typeof process.env.DB_PASSWORD)
+
 mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
     useNewUrlParser: true
   })
@@ -32,11 +31,11 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Authorization',
 
   });
-  res.set('ETag', '12345');
   if (req.method === 'OPTIONS') {
     res.set('Access-Control-Allow-Methods', 'GET, POST');
     res.status(200).json({});
   }
+  next();
 })
 // Characters Routes
 app.use('/characters', charactersRoutes);

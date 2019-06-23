@@ -1,93 +1,88 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const Character = require('../models/character')
+
 
 // GET Request
 // '/characters'
 // retrieve all characters
-router.get('/',
-  (req, res) => {
-    fs.readFile(__dirname + '/characters.json', (err, data) => {
+router.get('/', (req, res, next) => {
+  Character.find({})
+    .exec((err, characters) => {
       if (err) {
-        next(err)
+        next(err);
       } else {
-        res.status(200)
-          .json(JSON.parse(data));
-      }
-
+        res.status(200).json(characters)
+      };
     });
-  });
+});
 
 // GET Request
 // '/characters/:id'
 // retrieve a character
 router.get('/:id',
   (req, res, next) => {
-    fs.readFile(__dirname + '/characters.json', (err, data) => {
-      if (err) {
-        next(error);
-      } else {
-        var id = req.params.id;
-        var charactersDB = JSON.parse(data);
-        if (Object.keys(charactersDB).indexOf(id.toString()) === -1) {
-          var error = new Error("no item with this id");
-          error.status = 404;
+    var id = req.params.id;
+    Character.findById(id)
+      .exec((err, character) => {
+        if (err) {
+          var error = new Error("No character with this id");
+          error.status = 400,
           next(error);
         } else {
-          res.status(200)
-            .json(charactersDB[id.toString()]);
+            res.status(200).json(character);
         }
-      }
-    });
+      });
   });
 
 // POST Request
-// '/characters/:id'
+// '/characters'
 // create a character
 router.post('/', (req, res, next) => {
-  console.log(req.body)
-  if (req.body.firstName && req.body.lastName) {
-    console.log("begin")
-    fs.readFile(__dirname + '/characters.json', (err, data) => {
-      if (err) {
-        console.log("not OK")
-        next(err);
-      } else {
-        console.log("OK")
-        var charactersDB = JSON.parse(data);
-        var idArray = Object.keys(charactersDB)
-          .map((id) => {
-            return Number(id);
-          });
-        var maxId = null;
-        idArray.forEach((id) => {
-          if (id > maxId) {
-            maxId = id;
-          }
-        })
-        var newId = maxId + 1;
-        charactersDB[newId] = {
-          "firstName": req.body.firstName,
-          "lastName": req.body.lastName
-        };
+  var firstName = req.body.firstName;
+  var lastName = req.body.lastName;
+  var deathSeason = req.body.deathSeason;
 
-        fs.writeFile(__dirname + '/characters.json', JSON.stringify(charactersDB), (err) => {
+  if (!firstName || !lastName) {
+    res.status(422).json({
+      message: 'missing parameters'
+    })
+  } else {
+    var query = Character.findOne({
+      firstName: firstName,
+      lastName: lastName
+    });
+
+    query.exec((err, character) => {
+      if (err) {
+        next(err);
+      } else if (character) {
+        res.status(300).json({
+          message: 'Character already exists'
+        })
+      } else {
+        if (!deathSeason) {
+          let deathSeason = null;
+        }
+        let character = new Character({
+          firstName: firstName,
+          lastName: lastName,
+          deathSeason: deathSeason
+        });
+
+        character.save((err, character) => {
           if (err) {
             next(err);
           } else {
             res.status(201).json({
-              message: "character created",
-              id: newId
+              message: 'Character created',
+              characterId: character
             })
           }
         })
       }
-    })
-  } else {
-    res.status(422).json({
-      message: 'missing parameters'
-    })
+    });
   }
-})
-
+});
 module.exports = router;
