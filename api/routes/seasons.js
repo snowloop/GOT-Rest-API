@@ -20,7 +20,7 @@ Router.get('/:nb', (req, res, next) => {
 
   Character.find({
       deathSeason: nb
-    })deathSeason
+    })
     .exec((err, characters) => {
       if (err) {
         next(err);

@@ -11,7 +11,8 @@ const mongoose = require('mongoose');
 
 
 mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("Connection with the database : OK")
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
 
   });
   if (req.method === 'OPTIONS') {
-    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE');
     res.status(200).json({});
   }
   next();

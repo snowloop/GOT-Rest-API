@@ -28,9 +28,9 @@ Router.get('/:id',
         if (err) {
           var error = new Error("No character with this id");
           error.status = 400,
-          next(error);
+            next(error);
         } else {
-            res.status(200).json(character);
+          res.status(200).json(character);
         }
       });
   });
@@ -76,7 +76,7 @@ Router.post('/', (req, res, next) => {
           } else {
             res.status(201).json({
               message: 'Character created',
-              characterId: character
+              characterId: character._id
             })
           }
         })
@@ -84,4 +84,34 @@ Router.post('/', (req, res, next) => {
     });
   }
 });
+
+// DELETE Request
+// '/characters/:id'
+// delete a character
+Router.delete('/:id', (req, res, next) => {
+  var id = req.params.id;
+  Character.findByIdAndRemove(id)
+    .exec((err, doc) => {
+      if (err) {
+        if (err.name === 'CastError') {
+          var error = new Error("No Character with this id");
+          error.status = 400;
+          next(error);
+        } else {
+          next(err);
+        }
+      } else if (doc === null) {
+        var error = new Error("No Character with this id");
+        error.status = 400;
+        next(error);
+      } else {
+        res.status(200).json({
+          'message': 'Character deleted',
+          'id': id,
+          'character': doc
+        });
+      }
+    });
+});
+
 module.exports = Router;
