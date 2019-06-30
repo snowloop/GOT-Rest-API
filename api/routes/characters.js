@@ -1,13 +1,12 @@
 const express = require('express');
-const router = express.Router();
-const fs = require('fs');
-const Character = require('../models/character')
+const Router = express.Router();
+const Character = require('../models/character');
 
 
 // GET Request
 // '/characters'
 // retrieve all characters
-router.get('/', (req, res, next) => {
+Router.get('/', (req, res, next) => {
   Character.find({})
     .exec((err, characters) => {
       if (err) {
@@ -21,7 +20,7 @@ router.get('/', (req, res, next) => {
 // GET Request
 // '/characters/:id'
 // retrieve a character
-router.get('/:id',
+Router.get('/:id',
   (req, res, next) => {
     var id = req.params.id;
     Character.findById(id)
@@ -39,7 +38,7 @@ router.get('/:id',
 // POST Request
 // '/characters'
 // create a character
-router.post('/', (req, res, next) => {
+Router.post('/', (req, res, next) => {
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var deathSeason = req.body.deathSeason;
@@ -85,4 +84,4 @@ router.post('/', (req, res, next) => {
     });
   }
 });
-module.exports = router;
+module.exports = Router;

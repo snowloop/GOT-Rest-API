@@ -3,7 +3,8 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const charactersRoutes = require('./api/routes/characters');
+const charactersRouter = require('./api/routes/characters');
+const seasonsRouter = require('./api/routes/seasons');
 const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
@@ -38,8 +39,9 @@ app.use((req, res, next) => {
   next();
 })
 // Characters Routes
-app.use('/characters', charactersRoutes);
-
+app.use('/characters', charactersRouter);
+// Seasons Routes
+app.use('/seasons',seasonsRouter);
 // Main error
 app.use((req, res, next) => {
   var error = new Error('Not Found');
