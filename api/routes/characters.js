@@ -2,7 +2,6 @@ const express = require('express');
 const Router = express.Router();
 const Character = require('../models/character');
 
-
 // GET Request
 // '/characters'
 // retrieve all characters
@@ -12,7 +11,12 @@ Router.get('/', (req, res, next) => {
       if (err) {
         next(err);
       } else {
-        res.status(200).json(characters)
+        var charactersObject = {};
+        characters.forEach((character) => {
+          charactersObject[character._id] = character.firstName + " " + character.lastName
+        });
+        console.log(characters)
+        res.status(200).json(charactersObject)
       };
     });
 });
