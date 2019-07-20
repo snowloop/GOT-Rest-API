@@ -1,19 +1,22 @@
 const express = require('express');
-const router = express.Router();
-const fs = require('fs');
-const Character = require('../models/character')
-
+const Router = express.Router();
+const Character = require('../models/character');
 
 // GET Request
 // '/characters'
 // retrieve all characters
-router.get('/', (req, res, next) => {
+Router.get('/', (req, res, next) => {
   Character.find({})
     .exec((err, characters) => {
       if (err) {
         next(err);
       } else {
-        res.status(200).json(characters)
+        var charactersObject = {};
+        characters.forEach((character) => {
+          charactersObject[character._id] = character.firstName + " " + character.lastName
+        });
+        console.log(characters)
+        res.status(200).json(charactersObject)
       };
     });
 });
@@ -21,7 +24,7 @@ router.get('/', (req, res, next) => {
 // GET Request
 // '/characters/:id'
 // retrieve a character
-router.get('/:id',
+Router.get('/:id',
   (req, res, next) => {
     var id = req.params.id;
     Character.findById(id)
@@ -29,9 +32,9 @@ router.get('/:id',
         if (err) {
           var error = new Error("No character with this id");
           error.status = 400,
-          next(error);
+            next(error);
         } else {
-            res.status(200).json(character);
+          res.status(200).json(character);
         }
       });
   });
@@ -39,7 +42,7 @@ router.get('/:id',
 // POST Request
 // '/characters'
 // create a character
-router.post('/', (req, res, next) => {
+Router.post('/', (req, res, next) => {
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var deathSeason = req.body.deathSeason;
@@ -77,7 +80,7 @@ router.post('/', (req, res, next) => {
           } else {
             res.status(201).json({
               message: 'Character created',
-              characterId: character
+              characterId: character._id
             })
           }
         })
@@ -85,4 +88,34 @@ router.post('/', (req, res, next) => {
     });
   }
 });
-module.exports = router;
+
+// DELETE Request
+// '/characters/:id'
+// delete a character
+Router.delete('/:id', (req, res, next) => {
+  var id = req.params.id;
+  Character.findByIdAndRemove(id)
+    .exec((err, doc) => {
+      if (err) {
+        if (err.name === 'CastError') {
+          var error = new Error("No Character with this id");
+          error.status = 400;
+          next(error);
+        } else {
+          next(err);
+        }
+      } else if (doc === null) {
+        var error = new Error("No Character with this id");
+        error.status = 400;
+        next(error);
+      } else {
+        res.status(200).json({
+          'message': 'Character deleted',
+          'id': id,
+          'character': doc
+        });
+      }
+    });
+});
+
+module.exports = Router;

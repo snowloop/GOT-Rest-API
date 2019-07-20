@@ -3,14 +3,15 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const charactersRoutes = require('./api/routes/characters');
+const charactersRouter = require('./api/routes/characters');
+const seasonsRouter = require('./api/routes/seasons');
 const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
 
-
 mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("Connection with the database : OK")
@@ -32,14 +33,15 @@ app.use((req, res, next) => {
 
   });
   if (req.method === 'OPTIONS') {
-    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE');
     res.status(200).json({});
   }
   next();
 })
 // Characters Routes
-app.use('/characters', charactersRoutes);
-
+app.use('/characters', charactersRouter);
+// Seasons Routes
+app.use('/seasons',seasonsRouter);
 // Main error
 app.use((req, res, next) => {
   var error = new Error('Not Found');
