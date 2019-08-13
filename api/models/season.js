@@ -3,8 +3,7 @@ const model = require('mongoose').model;
 
 const seasonSchema = new Schema(
   {
-    number : Number,
-    deathCharacters : Array
+    number : Number
   }
 );
 module.exports = model('Season',seasonSchema);
