@@ -34,7 +34,12 @@ Router.get('/:id',
           error.status = 400,
             next(error);
         } else {
-          res.status(200).json(character);
+          res.status(200).json({
+            id: character._id,
+            firstName: character.firstName,
+            lastName: character.lastName,
+            deathSeason: character.deathSeason
+          });
         }
       });
   });
