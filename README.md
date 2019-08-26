@@ -1,11 +1,14 @@
 # GOT Characters API
 
 GOT_Characters_API is an api that can retrieves GOT characters and create some.
+
 Datas are stored on mongodb.
+
 This API is in development and it purpose is my training.
 
 # JS Features
 call-backs
+
 Then/catch methods
 
 # Architecture
@@ -22,7 +25,7 @@ POST /characters/id => Delete a character, if id isn't right, throw an error.
  GET /seasons => Retrieve all seasons,if id isn't right, throw an error.
 
  GET /seasons/id => Retrive a single season
- 
+
 # Character Object
 
 ```javascript
