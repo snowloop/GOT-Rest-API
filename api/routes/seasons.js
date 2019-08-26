@@ -19,18 +19,21 @@ Router.get('/', (req, res, next) => {
 Router.get('/:nb', (req, res, next) => {
   var nb = req.params.nb;
 
-  Character.find({
-      deathSeason: nb
-    })
-    .exec((err, characters) => {
-      if (err) {
-        next(err);
-      } else {
+  Season.findOne({
+    number: nb
+  }).exec((err, season) => {
+    if (err) {
+      var error = new Error("No season with this number.");
+      error.status = 400;
+      next(error);
+    } else {
+      res.status(200).json({
+        number : season.number,
+        deadCharacters : season.deadCharacters
+      })
+    }
 
-
-        res.status(200).json()
-      }
-    })
+  })
 });
 
 Router.post('/', (req, res, next) => {
@@ -53,15 +56,15 @@ Router.post('/', (req, res, next) => {
         });
       } else {
         let season = new Season({
-          number :number
+          number: number
         });
-        season.save((err,season)=>{
-          if(err){
+        season.save((err, season) => {
+          if (err) {
             next(err);
           } else {
             res.status(200).json({
-              message : "Season created",
-              seasonId : season._id
+              message: "Season created",
+              seasonId: season._id
             });
           }
         })
@@ -70,5 +73,6 @@ Router.post('/', (req, res, next) => {
   }
 });
 
+Router.put('/id')
 
 module.exports = Router;
