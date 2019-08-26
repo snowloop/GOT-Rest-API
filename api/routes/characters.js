@@ -30,9 +30,9 @@ Router.get('/:id',
     Character.findById(id)
       .exec((err, character) => {
         if (err) {
-          var error = new Error("No character with this id");
-          error.status = 400,
-            next(error);
+          res.status(400).json({
+            message: "No character with this id"
+          })
         } else {
           res.status(200).json({
             id: character._id,
@@ -103,16 +103,16 @@ Router.delete('/:id', (req, res, next) => {
     .exec((err, doc) => {
       if (err) {
         if (err.name === 'CastError') {
-          var error = new Error("No Character with this id");
-          error.status = 400;
-          next(error);
+          res.status(400).json({
+            message: "No character with this id"
+          });
         } else {
           next(err);
         }
       } else if (doc === null) {
-        var error = new Error("No Character with this id");
-        error.status = 400;
-        next(error);
+        res.status(400).json({
+          message: "No character with this id"
+        });
       } else {
         res.status(200).json({
           'message': 'Character deleted',

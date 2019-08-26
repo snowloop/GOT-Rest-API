@@ -9,10 +9,10 @@ Router.get('/', (req, res, next) => {
       if (err) {
         next(err);
       } else {
-        seasons = seasons.map((season)=>{
+        seasons = seasons.map((season) => {
           return {
-            number : season.number,
-            numberOfDeadCharacters : season.deadCharacters.length
+            number: season.number,
+            numberOfDeadCharacters: season.deadCharacters.length
           }
         });
         res.status(200).json(seasons)
@@ -32,8 +32,8 @@ Router.get('/:nb', (req, res, next) => {
       next(error);
     } else {
       res.status(200).json({
-        number : season.number,
-        deadCharacters : season.deadCharacters
+        number: season.number,
+        deadCharacters: season.deadCharacters
       })
     }
 
@@ -77,6 +77,21 @@ Router.post('/', (req, res, next) => {
   }
 });
 
-Router.put('/id')
+Router.put('/:nb', (req, res, next) => {
+  var deadCharacters = JSON.parse(req.body.deadCharacters);
+
+  if (!Array.isArray(deadCharacters)) {
+    res.status(422).json({
+      message: "deadCharacters parameters is not a list"
+    })
+  } else if (deadCharacters.length === 0) {
+    res.status(422).json({
+      message: "deadCharacters list if empty"
+    })
+  } else {
+
+    res.status(200).json('test')
+  }
+})
 
 module.exports = Router;
