@@ -36,6 +36,7 @@ deathSeason : Season
 }
 ```
 # Season Object
+```javascript
 // Season Object
 {
   number : Number
