@@ -16,14 +16,16 @@ GET /characters/id => Retrieve a single character, if id isn't right, throw an e
 
 POST /characters => create character. If firstName of lastName is missing, throw an error.
 
-POST /characters/id => delete a character, if id isn't right, throw an error.
+POST /characters/id => Delete a character, if id isn't right, throw an error.
 
 #### Season routes
+ GET /seasons => Retrieve all seasons,if id isn't right, throw an error.
 
+ GET /seasons/id => Retrive a single season
+ 
 # Character Object
 
 ```javascript
-// Character Object
 {
 fistName : String,
 lastName : String,
@@ -31,7 +33,6 @@ deathSeason : Season
 }
 ```
 # Season Object
-```javascript
 // Season Object
 {
   number : Number
