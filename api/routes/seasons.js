@@ -4,14 +4,18 @@ const Season = require('../models/season')
 const Character = require('../models/character');
 
 Router.get('/', (req, res, next) => {
-  Character.find({})
-    .exec((err, characters) => {
+  Season.find({})
+    .exec((err, seasons) => {
       if (err) {
         next(err);
       } else {
-
-
-        res.status(200).json()
+        seasons = seasons.map((season)=>{
+          return {
+            number : season.number,
+            numberOfDeadCharacters : season.deadCharacters.length
+          }
+        });
+        res.status(200).json(seasons)
       }
     })
 });
