@@ -78,20 +78,56 @@ Router.post('/', (req, res, next) => {
 });
 
 Router.put('/:nb', (req, res, next) => {
-  var deadCharacters = JSON.parse(req.body.deadCharacters);
+  var nb = req.params.nb;
 
-  if (!Array.isArray(deadCharacters)) {
-    res.status(422).json({
-      message: "deadCharacters parameters is not a list"
+  Season.findOne({
+      number: nb
     })
-  } else if (deadCharacters.length === 0) {
-    res.status(422).json({
-      message: "deadCharacters list if empty"
-    })
-  } else {
+    .exec((err, season) => {
+      if (err) {
+        console.log(err)
+      } else if (!season) {
+        res.status(404).json({
+          message: "No season with this number."
+        })
+      } else {
+        var deadCharacterIds = JSON.parse(req.body.deadCharacters);
 
-    res.status(200).json('test')
-  }
+        if (!Array.isArray(deadCharacterIds)) {
+          res.status(422).json({
+            message: "deadCharacters parameters is not a list"
+          })
+        } else if (deadCharacterIds.length === 0) {
+          res.status(422).json({
+            message: "deadCharacters list if empty"
+          })
+        } else {
+          Character.find({})
+            .exec((err, characters) => {
+              if (err) {
+                next(err);
+              } else {
+                var characterIds = characters.map((character) => {
+                  return character._id
+                });
+
+                var unfoundIds = []
+                var foundIds = []
+                for (var i = 0; i < deadCharacterIds.length; i++) {
+                  let id = deadCharacterIds[i]
+                  if (characterIds.index(id) !== -1) {
+                    unfoundIds.push(id);
+                  } else {
+                    foundIds.push(id);
+                  }
+                }
+                
+              }
+            })
+        }
+      }
+    })
 })
+
 
 module.exports = Router;

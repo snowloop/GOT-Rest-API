@@ -30,8 +30,8 @@ Router.get('/:id',
     Character.findById(id)
       .exec((err, character) => {
         if (err) {
-          res.status(400).json({
-            message: "No character with this id"
+          res.status(404).json({
+            message: "No character with this id."
           })
         } else {
           res.status(200).json({
