@@ -79,7 +79,6 @@ Router.post('/', (req, res, next) => {
 
 Router.put('/:nb', (req, res, next) => {
   var nb = req.params.nb;
-
   Season.findOne({
       number: nb
     })
@@ -91,7 +90,12 @@ Router.put('/:nb', (req, res, next) => {
           message: "No season with this number."
         })
       } else {
-        var deadCharacterIds = JSON.parse(req.body.deadCharacters);
+        if(!req.body.deadCharacterIds){
+          res.status(422).json({
+            message : "No ids where specified"
+          })
+        } else {
+        var deadCharacterIds = JSON.parse(req.body.deadCharacterIds);
 
         if (!Array.isArray(deadCharacterIds)) {
           res.status(422).json({
@@ -108,22 +112,42 @@ Router.put('/:nb', (req, res, next) => {
                 next(err);
               } else {
                 var characterIds = characters.map((character) => {
-                  return character._id
+                  return character.id.
                 });
-
                 var unfoundIds = []
                 var foundIds = []
                 for (var i = 0; i < deadCharacterIds.length; i++) {
-                  let id = deadCharacterIds[i]
-                  if (characterIds.index(id) !== -1) {
+                  var id = deadCharacterIds[i];
+                  if (characterIds.indexOf(id) === -1) {
                     unfoundIds.push(id);
                   } else {
                     foundIds.push(id);
+                    season.deadCharacters.push(id)
                   }
                 }
-                
+                if (foundIds.length === 0) {
+                  res.status(422).json({
+                    message: "None of the ids could be found."
+                  })
+                } else {
+                  season.save((err, season) => {
+                    if (err) {
+                      next(err)
+                    } else if (unfoundIds.length !== 0) {
+                      res.status(207).json({
+                        message: "Season number " + nb + " has been updated but somes character ids could not be found",
+                        unfoundIds: unfoundIds
+                      })
+                    } else {
+                      res.status(202).json({
+                        message: "Season number " + nb + " has been updated."
+                      })
+                    }
+                  })
+                }
               }
             })
+          }
         }
       }
     })

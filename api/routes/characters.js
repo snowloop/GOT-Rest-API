@@ -13,7 +13,7 @@ Router.get('/', (req, res, next) => {
       } else {
         var charactersObject = {};
         characters.forEach((character) => {
-          charactersObject[character._id] = character.firstName + " " + character.lastName
+          charactersObject[character.id] = character.firstName + " " + character.lastName
         });
         console.log(characters)
         res.status(200).json(charactersObject)
@@ -35,7 +35,7 @@ Router.get('/:id',
           })
         } else {
           res.status(200).json({
-            id: character._id,
+            id: character.id,
             firstName: character.firstName,
             lastName: character.lastName,
             deathSeason: character.deathSeason
@@ -85,7 +85,7 @@ Router.post('/', (req, res, next) => {
           } else {
             res.status(201).json({
               message: 'Character created',
-              characterId: character._id
+              characterId: character.id
             })
           }
         })

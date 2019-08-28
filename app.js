@@ -42,6 +42,7 @@ app.use((req, res, next) => {
 app.use('/characters', charactersRouter);
 // Seasons Routes
 app.use('/seasons',seasonsRouter);
+
 // Main error
 app.use((req, res, next) => {
   var error = new Error('Not Found');
