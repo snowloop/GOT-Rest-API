@@ -68,7 +68,7 @@ Router.post('/', (req, res, next) => {
           } else {
             res.status(200).json({
               message: "Season created",
-              seasonId: season._id
+              seasonId: season.id
             });
           }
         })
@@ -112,7 +112,7 @@ Router.put('/:nb', (req, res, next) => {
                 next(err);
               } else {
                 var characterIds = characters.map((character) => {
-                  return character.id.
+                  return character.id
                 });
                 var unfoundIds = []
                 var foundIds = []
