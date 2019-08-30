@@ -7,7 +7,7 @@ Datas are stored on mongodb.
 This API is in development and it purpose is my training.
 
 # JS Features
-call-backs
+callbacks
 
 Then/catch methods
 
@@ -15,16 +15,18 @@ Then/catch methods
 #### Characters routes
 GET /characters   => Retrieve all characters.
 
-GET /characters/id => Retrieve a single character, if id isn't right, throw an error.
+GET /characters/id => Retrieve a single character.
 
-POST /characters => create character. If firstName of lastName is missing, throw an error.
+POST /characters => Create a character.
 
-POST /characters/id => Delete a character, if id isn't right, throw an error.
+POST /characters/id => Delete a character.
 
 #### Season routes
- GET /seasons => Retrieve all seasons,if id isn't right, throw an error.
+ GET /seasons => Retrieve all seasons.
 
- GET /seasons/id => Retrive a single season
+ GET /seasons/nb => Retrieve a single season.
+
+ PUT /seasons/nb => Add dead characters to the season.
 
 # Character Object
 
@@ -32,13 +34,14 @@ POST /characters/id => Delete a character, if id isn't right, throw an error.
 {
 fistName : String,
 lastName : String,
-deathSeason : Season
+deathSeason : Object[]
 }
 ```
 # Season Object
 ```javascript
 // Season Object
 {
-  number : Number
+  number : Number,
+  deadCharacters : Object[]
 }
 ```
