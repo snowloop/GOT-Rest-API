@@ -33,9 +33,9 @@ Router.get('/:nb', (req, res, next) => {
     number: nb
   }).exec((err, season) => {
     if (err) {
-      var error = new Error("No season with this number.");
-      error.status = 400;
-      next(error);
+      res.status(404).json({
+        message : "No season with this number."
+      })
     } else {
       res.status(200).json({
         number: season.number,

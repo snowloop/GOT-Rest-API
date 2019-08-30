@@ -15,7 +15,7 @@ Router.get('/', (req, res, next) => {
         characters.forEach((character) => {
           charactersObject[character.id] = character.firstName + " " + character.lastName
         });
-        res.status(200).json(charactersObject)
+        res.status(200).json(charactersObject);
       };
     });
 });
