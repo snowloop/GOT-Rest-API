@@ -49,7 +49,6 @@ Router.get('/:id',
 Router.post('/', (req, res, next) => {
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
-  var deathSeason = req.body.deathSeason;
 
   if (!firstName || !lastName) {
     res.status(422).json({
@@ -69,13 +68,9 @@ Router.post('/', (req, res, next) => {
           message: 'Character already exists'
         })
       } else {
-        if (!deathSeason) {
-          let deathSeason = null;
-        }
         let character = new Character({
           firstName: firstName,
-          lastName: lastName,
-          deathSeason: deathSeason
+          lastName: lastName
         });
 
         character.save((err, character) => {
