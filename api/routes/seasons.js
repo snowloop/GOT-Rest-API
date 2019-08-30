@@ -42,7 +42,6 @@ Router.get('/:nb', (req, res, next) => {
         deadCharacters: season.deadCharacters
       });
     }
-
   })
 });
 
