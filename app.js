@@ -9,7 +9,7 @@ const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
 
-/*
+
 mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
     useNewUrlParser: true,
     useFindAndModify: false
@@ -20,7 +20,7 @@ mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
     console.log('Error during connection :' + err)
   });
 
-*/
+
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
