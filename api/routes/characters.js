@@ -15,7 +15,6 @@ Router.get('/', (req, res, next) => {
         characters.forEach((character) => {
           charactersObject[character.id] = character.firstName + " " + character.lastName
         });
-        console.log(characters)
         res.status(200).json(charactersObject)
       };
     });
@@ -103,7 +102,7 @@ Router.delete('/:id', (req, res, next) => {
     .exec((err, doc) => {
       if (err) {
         if (err.name === 'CastError') {
-          res.status(400).json({
+          res.status(404).json({
             message: "No character with this id"
           });
         } else {
