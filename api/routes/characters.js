@@ -8,12 +8,12 @@ const Character = require('../models/character');
 Router.get('/', (req, res, next) => {
   Character.find({})
     .select("firstName lastName")
-    .exec((err, characters) => {
+    .exec((err, charactersArray) => {
       if (err) {
         next(err);
       } else {
         var charactersObject = {};
-        characters.forEach((character) => {
+        charactersArray.forEach((character) => {
           charactersObject[character.id] = character.firstName + " " + character.lastName
         });
         res.status(200).json(charactersObject);
@@ -98,16 +98,15 @@ Router.delete('/:id', (req, res, next) => {
   Character.findByIdAndRemove(id)
     .exec((err, character) => {
       if (err && err.name === 'CastError') {
-          res.status(404).json({
-            message: "No character with this id"
-          });
-        } else if(err){
-          next(err);
+        res.status(404).json({
+          message: "No character with this id"
+        });
+      } else if (err) {
+        next(err);
       } else {
         res.status(200).json({
           'message': 'Character deleted',
-          'id': id,
-          'character':character
+          'character': character
         });
       }
     });

@@ -8,17 +8,17 @@ const Character = require('../models/character');
 // retrieve all seasons
 Router.get('/', (req, res, next) => {
   Season.find({})
-    .exec((err, seasons) => {
+    .exec((err, seasonArray) => {
       if (err) {
         next(err);
       } else {
-        seasons = seasons.map((season) => {
+        seasonArray = seasonArray.map((season) => {
           return {
             number: season.number,
             numberOfDeadCharacters: season.deadCharacters.length
           }
         });
-        res.status(200).json(seasons);
+        res.status(200).json(seasonArray);
       }
     })
 });
@@ -34,7 +34,7 @@ Router.get('/:nb', (req, res, next) => {
   }).exec((err, season) => {
     if (err) {
       res.status(404).json({
-        message : "No season with this number."
+        message: "No season with this number."
       })
     } else {
       res.status(200).json({
@@ -56,10 +56,9 @@ Router.post('/', (req, res, next) => {
       message: 'missing parameters'
     })
   } else {
-    var query = Season.findOne({
+    Season.findOne({
       number: number
-    });
-    query.exec((err, season) => {
+    }).exec((err, season) => {
       if (err) {
         next(err);
       } else if (season) {
@@ -110,7 +109,7 @@ Router.put('/:nb', (req, res, next) => {
 
           if (!Array.isArray(deadCharacterIds)) {
             res.status(422).json({
-              message: "deadCharacters parameters is not a list"
+              message: "deadCharacterIds parameters is not a list"
             });
           } else if (deadCharacterIds.length === 0) {
             res.status(422).json({
@@ -118,11 +117,11 @@ Router.put('/:nb', (req, res, next) => {
             });
           } else {
             Character.find({})
-              .exec((err, characters) => {
+              .exec((err, characterArray) => {
                 if (err) {
                   next(err);
                 } else {
-                  var characterIds = characters.map((character) => {
+                  var characterIds = characterArray.map((character) => {
                     return character.id
                   });
                   var unfoundIds = [];
