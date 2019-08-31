@@ -1,6 +1,7 @@
 const express = require('express');
 const Router = express.Router();
 const Character = require('../models/character');
+const Season = require('../models/season');
 
 // GET Request
 // '/characters'
@@ -36,12 +37,32 @@ Router.get('/:id',
         } else if (err) {
           next(err);
         } else {
-          res.status(200).json({
-            id: character.id,
-            firstName: character.firstName,
-            lastName: character.lastName,
-            deathSeason: character.deathSeason
-          });
+
+          Season.find({
+              'deadCharacters': id
+            })
+            .select("number")
+            .exec((err, seasonArray) => {
+              if (err) {
+                next(err);
+              } else if (seasonArray.length !== 0) {
+                console.log('Season found')
+                console.log(seasonArray)
+                res.status(200).json({
+                  id: character.id,
+                  firstName: character.firstName,
+                  lastName: character.lastName,
+                  deathSeason: seasonArray[0].number
+                });
+              } else {
+                res.status(200).json({
+                  id: character.id,
+                  firstName: character.firstName,
+                  lastName: character.lastName,
+                  deathSeason: undefined
+                });
+              }
+            })
         }
       });
   });
