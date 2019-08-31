@@ -7,6 +7,7 @@ const Character = require('../models/character');
 // retrieve all characters
 Router.get('/', (req, res, next) => {
   Character.find({})
+    .select("firstName lastName")
     .exec((err, characters) => {
       if (err) {
         next(err);
@@ -28,10 +29,12 @@ Router.get('/:id',
     var id = req.params.id;
     Character.findById(id)
       .exec((err, character) => {
-        if (err) {
+        if (err && err.name === "CastError") {
           res.status(404).json({
             message: "No character with this id."
           })
+        } else if (err) {
+          next(err);
         } else {
           res.status(200).json({
             id: character.id,
@@ -53,38 +56,37 @@ Router.post('/', (req, res, next) => {
   if (!firstName || !lastName) {
     res.status(422).json({
       message: 'missing parameters'
-    })
+    });
   } else {
-    var query = Character.findOne({
-      firstName: firstName,
-      lastName: lastName
-    });
+    Character.findOne({
+        firstName: firstName,
+        lastName: lastName
+      })
+      .exec((err, character) => {
+        if (err) {
+          next(err);
+        } else if (character) {
+          res.status(409).json({
+            message: 'Character already exists'
+          })
+        } else {
+          let character = new Character({
+            firstName: firstName,
+            lastName: lastName
+          });
 
-    query.exec((err, character) => {
-      if (err) {
-        next(err);
-      } else if (character) {
-        res.status(300).json({
-          message: 'Character already exists'
-        })
-      } else {
-        let character = new Character({
-          firstName: firstName,
-          lastName: lastName
-        });
-
-        character.save((err, character) => {
-          if (err) {
-            next(err);
-          } else {
-            res.status(201).json({
-              message: 'Character created',
-              characterId: character.id
-            })
-          }
-        })
-      }
-    });
+          character.save((err, character) => {
+            if (err) {
+              next(err);
+            } else {
+              res.status(201).json({
+                message: 'Character created',
+                characterId: character.id
+              })
+            }
+          })
+        }
+      });
   }
 });
 
@@ -94,24 +96,18 @@ Router.post('/', (req, res, next) => {
 Router.delete('/:id', (req, res, next) => {
   var id = req.params.id;
   Character.findByIdAndRemove(id)
-    .exec((err, doc) => {
-      if (err) {
-        if (err.name === 'CastError') {
+    .exec((err, character) => {
+      if (err && err.name === 'CastError') {
           res.status(404).json({
             message: "No character with this id"
           });
-        } else {
+        } else if(err){
           next(err);
-        }
-      } else if (doc === null) {
-        res.status(400).json({
-          message: "No character with this id"
-        });
       } else {
         res.status(200).json({
           'message': 'Character deleted',
           'id': id,
-          'character': doc
+          'character':character
         });
       }
     });

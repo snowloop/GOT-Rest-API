@@ -9,7 +9,6 @@ This API is in development and it purpose is my training.
 # JS Features
 callbacks
 
-Then/catch methods
 
 # Architecture
 #### Characters routes
