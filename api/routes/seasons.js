@@ -47,45 +47,6 @@ Router.get('/:nb', (req, res, next) => {
     })
 });
 
-// POST Request
-// '/seasons'
-// Create a season
-Router.post('/', (req, res, next) => {
-  var number = req.body.number;
-
-  if (!number) {
-    res.status(422).json({
-      message: 'missing parameters'
-    })
-  } else {
-    var query = Season.findOne({
-      number: number
-    });
-    query.exec((err, season) => {
-      if (err) {
-        next(err);
-      } else if (season) {
-        res.status(300).json({
-          message: "Season already exists"
-        });
-      } else {
-        let season = new Season({
-          number: number
-        });
-        season.save((err, season) => {
-          if (err) {
-            next(err);
-          } else {
-            res.status(200).json({
-              message: "Season created",
-              seasonId: season.id
-            });
-          }
-        })
-      }
-    })
-  }
-});
 
 // PUT Request
 // '/seasons/:nb'
