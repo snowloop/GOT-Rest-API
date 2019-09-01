@@ -6,9 +6,6 @@ Datas are stored on mongodb.
 
 This API is in development and it purpose is my training.
 
-# JS Features
-callbacks
-
 
 # Architecture
 #### Characters routes
