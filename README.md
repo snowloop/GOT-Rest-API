@@ -15,7 +15,7 @@ GET /characters/id => Retrieve a single character.
 
 POST /characters => Create a character.
 
-POST /characters/id => Delete a character.
+DELETE /characters/id => Delete a character.
 
 #### Season routes
  GET /seasons => Retrieve all seasons.

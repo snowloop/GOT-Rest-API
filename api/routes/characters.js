@@ -46,8 +46,6 @@ Router.get('/:id',
               if (err) {
                 next(err);
               } else if (season) {
-                console.log('Season found')
-                console.log(season)
                 res.status(200).json({
                   id: character.id,
                   firstName: character.firstName,
