@@ -35,6 +35,8 @@ Router.get('/:nb', (req, res, next) => {
     .populate("deadCharacters", 'id firstName lastName')
     .exec((err, season) => {
       if (err) {
+        next(err);
+      } else if (!season) {
         res.status(404).json({
           message: "No season with this number."
         })
@@ -80,7 +82,7 @@ Router.put('/:nb', (req, res, next) => {
           });
         } else if (err) {
           next(err);
-        } else if (season === null) {
+        } else if (!season) {
           res.status(404).json({
             message: "No season with this number."
           });

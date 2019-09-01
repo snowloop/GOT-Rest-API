@@ -31,13 +31,16 @@ Router.get('/:id',
     Character.findById(id)
       .exec((err, character) => {
         if (err && err.name === "CastError") {
-          res.status(404).json({
-            message: "No character with this id."
+          res.status(422).json({
+            message: "Id parameter has not the right format"
           })
         } else if (err) {
           next(err);
+        } else if (!season) {
+          res.status(404).json({
+            message: "No character with this id."
+          })
         } else {
-
           Season.findOne({
               'deadCharacters': id
             })
@@ -117,11 +120,15 @@ Router.delete('/:id', (req, res, next) => {
   Character.findByIdAndRemove(id)
     .exec((err, character) => {
       if (err && err.name === 'CastError') {
-        res.status(404).json({
-          message: "No character with this id"
+        res.status(422).json({
+          message: "Id parameter has not the right format"
         });
       } else if (err) {
         next(err);
+      } else if (!season) {
+        res.status(404).json({
+          message: "No season with this id."
+        })
       } else {
         res.status(200).json({
           'message': 'Character deleted',
