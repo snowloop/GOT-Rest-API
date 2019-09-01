@@ -28,21 +28,22 @@ Router.get('/', (req, res, next) => {
 // retrieve a season
 Router.get('/:nb', (req, res, next) => {
   var nb = req.params.nb;
-
   Season.findOne({
-    number: nb
-  }).exec((err, season) => {
-    if (err) {
-      res.status(404).json({
-        message: "No season with this number."
-      })
-    } else {
-      res.status(200).json({
-        number: season.number,
-        deadCharacters: season.deadCharacters
-      });
-    }
-  })
+      number: nb
+    })
+    .populate("deadCharacters", 'id firstName lastName')
+    .exec((err, season) => {
+      if (err) {
+        res.status(404).json({
+          message: "No season with this number."
+        })
+      } else {
+        res.status(200).json({
+          number: season.number,
+          deadCharacters: season.deadCharacters
+        });
+      }
+    })
 });
 
 // POST Request
@@ -99,65 +100,63 @@ Router.put('/:nb', (req, res, next) => {
         res.status(404).json({
           message: "No season with this number."
         });
+      } else if (!req.body.deadCharacterIds) {
+        res.status(422).json({
+          message: "No ids where specified"
+        });
       } else {
-        if (!req.body.deadCharacterIds) {
+        var deadCharacterIds = JSON.parse(req.body.deadCharacterIds);
+
+        if (!Array.isArray(deadCharacterIds)) {
           res.status(422).json({
-            message: "No ids where specified"
+            message: "deadCharacterIds parameters is not a list"
+          });
+        } else if (deadCharacterIds.length === 0) {
+          res.status(422).json({
+            message: "deadCharacters list if empty"
           });
         } else {
-          var deadCharacterIds = JSON.parse(req.body.deadCharacterIds);
-
-          if (!Array.isArray(deadCharacterIds)) {
-            res.status(422).json({
-              message: "deadCharacterIds parameters is not a list"
-            });
-          } else if (deadCharacterIds.length === 0) {
-            res.status(422).json({
-              message: "deadCharacters list if empty"
-            });
-          } else {
-            Character.find({})
-              .exec((err, characterArray) => {
-                if (err) {
-                  next(err);
-                } else {
-                  var characterIds = characterArray.map((character) => {
-                    return character.id
-                  });
-                  var unfoundIds = [];
-                  var foundIds = [];
-                  for (var i = 0; i < deadCharacterIds.length; i++) {
-                    var id = deadCharacterIds[i];
-                    if (characterIds.indexOf(id) === -1) {
-                      unfoundIds.push(id);
-                    } else {
-                      foundIds.push(id);
-                      season.deadCharacters.push(id);
-                    }
-                  }
-                  if (foundIds.length === 0) {
-                    res.status(422).json({
-                      message: "None of the ids could be found."
-                    });
+          Character.find()
+            .exec((err, characterArray) => {
+              if (err) {
+                next(err);
+              } else {
+                var characterIds = characterArray.map((character) => {
+                  return character.id
+                });
+                var unfoundIds = [];
+                var foundIds = [];
+                for (var i = 0; i < deadCharacterIds.length; i++) {
+                  var id = deadCharacterIds[i];
+                  if (characterIds.indexOf(id) === -1) {
+                    unfoundIds.push(id);
                   } else {
-                    season.save((err, season) => {
-                      if (err) {
-                        next(err)
-                      } else if (unfoundIds.length !== 0) {
-                        res.status(207).json({
-                          message: "Season number " + nb + " has been updated but somes character ids could not be found",
-                          unfoundIds: unfoundIds
-                        });
-                      } else {
-                        res.status(202).json({
-                          message: "Season number " + nb + " has been updated."
-                        });
-                      }
-                    })
+                    foundIds.push(id);
+                    season.deadCharacters.push(id);
                   }
                 }
-              })
-          }
+                if (foundIds.length === 0) {
+                  res.status(422).json({
+                    message: "None of the ids could be found."
+                  });
+                } else {
+                  season.save((err, season) => {
+                    if (err) {
+                      next(err)
+                    } else if (unfoundIds.length !== 0) {
+                      res.status(207).json({
+                        message: "Season number " + nb + " has been updated but somes character ids could not be found",
+                        unfoundIds: unfoundIds
+                      });
+                    } else {
+                      res.status(202).json({
+                        message: "Season number " + nb + " has been updated."
+                      });
+                    }
+                  })
+                }
+              }
+            })
         }
       }
     })

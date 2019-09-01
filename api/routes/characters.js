@@ -38,21 +38,21 @@ Router.get('/:id',
           next(err);
         } else {
 
-          Season.find({
+          Season.findOne({
               'deadCharacters': id
             })
             .select("number")
-            .exec((err, seasonArray) => {
+            .exec((err, season) => {
               if (err) {
                 next(err);
-              } else if (seasonArray.length !== 0) {
+              } else if (season) {
                 console.log('Season found')
-                console.log(seasonArray)
+                console.log(season)
                 res.status(200).json({
                   id: character.id,
                   firstName: character.firstName,
                   lastName: character.lastName,
-                  deathSeason: seasonArray[0].number
+                  deathSeason: season.number
                 });
               } else {
                 res.status(200).json({
