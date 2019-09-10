@@ -5,10 +5,10 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const charactersRouter = require('./api/routes/characters');
 const seasonsRouter = require('./api/routes/seasons');
+const usersRouter = require('./api/routes/users');
 const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
-
 
 mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
     useNewUrlParser: true,
@@ -43,7 +43,8 @@ app.use((req, res, next) => {
 app.use('/characters', charactersRouter);
 // Seasons Routes
 app.use('/seasons',seasonsRouter);
-
+// Users Routes
+app.use('/users',usersRouter);
 // Main error
 app.use((req, res, next) => {
   var error = new Error('Not Found');
