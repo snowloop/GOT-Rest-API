@@ -39,14 +39,13 @@ DELETE /characters/id => Delete a character.
 {
 fistName : String,
 lastName : String,
-deathSeason : Object[]
+deathSeason : Number
 }
 ```
 # Season Object
 ```javascript
-// Season Object
 {
   number : Number,
-  deadCharacters : Object[]
+  deadCharacters : Character[]
 }
 ```
