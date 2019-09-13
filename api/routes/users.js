@@ -80,4 +80,20 @@ router.get("/",(req,res,next)=>{
     res.status(200).json(users)
   })
 })
+
+router.post("/login",(req,res,next)=>{
+  var email = req.body.email;
+  var password = req.body.password;
+
+  if (!email || !password) {
+    res.status(401).json({
+      message: "Unauthorized"
+    })
+  } else {
+
+    
+  }
+
+
+})
 module.exports = router;

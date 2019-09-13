@@ -11,18 +11,26 @@ This API is in development and it purpose is my training.
 #### Characters routes
 GET /characters   => Retrieve all characters.
 
-GET /characters/id => Retrieve a single character.
+GET /characters/:id => Retrieve a single character.
 
 POST /characters => Create a character.
 
-DELETE /characters/id => Delete a character.
+DELETE /characters/:id => Delete a character.
 
 #### Season routes
  GET /seasons => Retrieve all seasons.
 
- GET /seasons/nb => Retrieve a single season.
+ GET /seasons/:nb => Retrieve a single season.
 
- PUT /seasons/nb => Add dead characters to the season.
+ PUT /seasons/:nb => Add dead characters to the season.
+
+#### User routes
+
+POST  /users/signup => Signup URL
+
+GET /users => Retrieve all user emails
+
+DELETE /users/:email => Delete a user
 
 # Character Object
 
@@ -30,14 +38,13 @@ DELETE /characters/id => Delete a character.
 {
 fistName : String,
 lastName : String,
-deathSeason : Object[]
+deathSeason : Number
 }
 ```
 # Season Object
 ```javascript
-// Season Object
 {
   number : Number,
-  deadCharacters : Object[]
+  deadCharacters : Character[]
 }
 ```

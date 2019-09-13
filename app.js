@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const charactersRouter = require('./api/routes/characters');
@@ -20,8 +19,10 @@ mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
     console.log('Error during connection :' + err)
   });
 
-
+// Logging Tool
 app.use(morgan('dev'));
+
+// URL and Body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
@@ -45,13 +46,15 @@ app.use('/characters', charactersRouter);
 app.use('/seasons',seasonsRouter);
 // Users Routes
 app.use('/users',usersRouter);
-// Main error
+
+// Error for no found route
 app.use((req, res, next) => {
-  var error = new Error('Not Found');
+  var error = new Error('URL Not Found');
   error.status = 404;
   next(error);
 })
 
+// if error
 app.use((error, req, res, next) => {
   res.status(error.status || 500)
     .json({
