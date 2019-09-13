@@ -8,6 +8,13 @@ This API is in development and it purpose is my training.
 
 In this branch, I used Promises for /users URL.
 
+# About this version
+This version includes all character and season management URL.
+It also includes an authentication system.
+
+Arrow Functions and Callbacks were used for the development of this branch.
+Promises, Then and Catch Methods are used for the users routes.
+
 # Architecture
 #### Characters routes
 GET /characters   => Retrieve all characters.
