@@ -6,6 +6,7 @@ Datas are stored on mongodb.
 
 This API is in development and it purpose is my training.
 
+In this branch, I used Promises for /users URL
 
 # Architecture
 #### Characters routes
