@@ -4,7 +4,16 @@ GOT_Characters_API is an api that can retrieves GOT characters and create some.
 
 Datas are stored on mongodb.
 
-This API is in development and it purpose is my training.
+This API is in development and its purpose is my training.
+
+# About this version
+This version includes all character and season management URL without
+authentication.
+
+Arrow Functions and Callbacks were used for the development of this branch.
+
+The Master branch of this repo uses an authentication system and Promises for
+the development of this feature.
 
 
 # Architecture
