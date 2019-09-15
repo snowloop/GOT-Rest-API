@@ -1,6 +1,7 @@
 # GOT Characters API
 
-GOT_Characters_API is an api that can retrieves GOT characters and create some.
+GOT_Characters_API is an api that can retrieves GOT characters, GOT seasons,
+ update and delete them.
 
 Datas are stored on mongodb.
 
@@ -33,7 +34,7 @@ DELETE /characters/:id
 ```
 => [Auth needed, Admin reserved] Delete a character.
 
-#### Season routes
+#### Seasons routes
 ```
  GET /seasons
  ```
@@ -47,7 +48,7 @@ DELETE /characters/:id
  ```
  => [Auth needed] Add dead characters to the season.
 
-#### User routes
+#### Users routes
 ```
 POST  /users/signup
 ```
