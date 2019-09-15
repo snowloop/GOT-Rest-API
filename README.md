@@ -31,14 +31,21 @@ POST /characters
 ```
 DELETE /characters/:id
 ```
-=> [Auth needed, Admin reserved]Delete a character.
+=> [Auth needed, Admin reserved] Delete a character.
 
 #### Season routes
- GET /seasons => Retrieve all seasons.
-
- GET /seasons/:nb => Retrieve a single season.
-
- PUT /seasons/:nb => Add dead characters to the season.
+```
+ GET /seasons
+ ```
+ => Retrieve all seasons.
+```
+ GET /seasons/:nb
+ ```
+ => Retrieve a single season.
+```
+ PUT /seasons/:nb
+ ```
+ => [Auth needed] Add dead characters to the season.
 
 #### User routes
 ```
