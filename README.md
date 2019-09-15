@@ -1,42 +1,77 @@
 # GOT Characters API
 
-GOT_Characters_API is an api that can retrieves GOT characters and create some.
+GOT_Characters_API is an api that can retrieves GOT characters, GOT seasons,
+ update and delete them.
 
 Datas are stored on mongodb.
 
 This API is in development and its purpose is my training.
 
-# About this version
-This version includes all character and season management URL without
-authentication.
+# About this branch
+This branch includes all character and season management URL.
+It also includes an authentication system.
 
 Arrow Functions and Callbacks were used for the development of this branch.
-
-The Master branch of this repo uses an authentication system and Promises for
-the development of this feature.
-
+Promises, Then and Catch methods are used for the users routes.
 
 # Architecture
 #### Characters routes
-GET /characters   => Retrieve all characters.
+```
+GET /characters
+```
+=> Retrieve all characters.
+```
+GET /characters/:id
+```
+=> Retrieve a single character.
+```
+POST /characters
+```
+=> [Auth needed] Create a character.
 
-GET /characters/id => Retrieve a single character.
+```
+DELETE /characters/:id
+```
+=> [Auth needed, Admin reserved] Delete a character.
 
-POST /characters => Create a character.
+#### Seasons routes
+```
+ GET /seasons
+ ```
+ => Retrieve all seasons.
+```
+ GET /seasons/:nb
+ ```
+ => Retrieve a single season.
+```
+ PUT /seasons/:nb
+ ```
+ => [Auth needed] Add dead characters to the season.
 
-DELETE /characters/id => Delete a character.
+#### Users routes
+```
+POST  /users/signup
+```
+=> Signup URL
+```
+POST /users/login
+```
+=> Login URL
+```
+GET /users
+```
+=> [Auth needed, Admin reserved] Retrieve all user emails
 
-#### Season routes
- GET /seasons => Retrieve all seasons.
-
- GET /seasons/nb => Retrieve a single season.
-
- PUT /seasons/nb => Add dead characters to the season.
+```
+DELETE /users/:email
+```
+=> [Auth needed, Admin reserved] Delete a user
 
 # Character Object
 
 ```javascript
 {
+id : String,
 fistName : String,
 lastName : String,
 deathSeason : Number
@@ -46,6 +81,10 @@ deathSeason : Number
 ```javascript
 {
   number : Number,
-  deadCharacters : Character[]
+  deadCharacters : {
+    id : String
+    firstName : String,
+    lastname : String
+  }
 }
 ```
