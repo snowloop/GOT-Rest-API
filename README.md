@@ -5,14 +5,14 @@ GOT_Characters_API is an api that can retrieves GOT characters, GOT seasons,
 
 Datas are stored on mongodb.
 
-This API is in development and it purpose is my training.
+This API is in development and its purpose is my training.
 
 # About this branch
 This branch includes all character and season management URL.
 It also includes an authentication system.
 
 Arrow Functions and Callbacks were used for the development of this branch.
-Promises, Then and Catch Methods are used for the users routes.
+Promises, Then and Catch methods are used for the users routes.
 
 # Architecture
 #### Characters routes
