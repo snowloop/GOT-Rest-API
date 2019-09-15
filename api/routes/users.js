@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 const User = require('../models/user');
 const JWT = require('jsonwebtoken');
+const checkAuthUser = require('../middleware/check-auth').checkAuthUser;
+const checkAuthAdmin = require('../middleware/check-auth').checkAuthAdmin;
+
 // POST Request
 // '/users/signup'
 // Signup the user
@@ -108,17 +111,13 @@ router.post("/login", (req, res, next) => {
         next(err);
       })
   }
+});
 
-
-})
-
-
-/// Should be reserved to admin ///
 
 // DELETE Request
 // '/users/:userId'
 // Delete a user
-router.delete("/:userId", (req, res, next) => {
+router.delete("/:userId", checkAuthAdmin ,(req, res, next) => {
   var userId = req.params.userId;
   User.findOneAndRemove({
       _id: userId
@@ -138,18 +137,31 @@ router.delete("/:userId", (req, res, next) => {
       }
     })
     .catch(err => {
-      next(err)
+      next(err);
     })
 })
 
 // GET Request
 // '/users'
 // retrieve all users email
-router.get("/", (req, res, next) => {
+router.get("/", checkAuthAdmin ,(req, res, next) => {
   User.find()
     .exec()
-    .then(users => {
-      res.status(200).json(users)
+    .then(userArray => {
+      const objectUsers = {}
+
+      for (var i = 0; i < userArray.length; i++) {
+        let user = userArray[i]
+        objectUsers[user._id] = {
+          email: user.email,
+          isAdmin: user.isAdmin
+        }
+      }
+
+      res.status(200).json(objectUsers);
+    })
+    .catch(err => {
+      next(err);
     })
 })
 

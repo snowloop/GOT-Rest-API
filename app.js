@@ -9,7 +9,6 @@ const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
 
-const isDecoded = require('./api/middleware/check-auth.js')
 
 if(process.env.TRYTOCONNECT === "TRUE"){
 mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
@@ -45,7 +44,6 @@ app.use((req, res, next) => {
   next();
 })
 
-app.use(isDecoded);
 // Characters Routes
 app.use('/characters', charactersRouter);
 // Seasons Routes
@@ -65,7 +63,7 @@ app.use((error, req, res, next) => {
   res.status(error.status || 500)
     .json({
       error: {
-        message: error.message
+        message: error.message,
       }
     });
 

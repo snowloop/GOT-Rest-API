@@ -3,9 +3,12 @@ const Router = express.Router();
 const Season = require('../models/season')
 const Character = require('../models/character');
 
+const checkAuthUser = require('../middleware/check-auth').checkAuthUser;
+
 // GET Request
 // '/seasons'
 // retrieve all seasons
+// No auth
 Router.get('/', (req, res, next) => {
   Season.find({})
     .exec((err, seasons) => {
@@ -26,6 +29,7 @@ Router.get('/', (req, res, next) => {
 // GET Request
 // '/seasons/:nb'
 // retrieve a season
+// No auth
 Router.get('/:nb', (req, res, next) => {
   var nb = req.params.nb;
 
@@ -53,7 +57,8 @@ Router.get('/:nb', (req, res, next) => {
 // PUT Request
 // '/seasons/:nb'
 // Add dead characters to the season
-Router.put('/:nb', (req, res, next) => {
+// User auth
+Router.put('/:nb', checkAuthUser,(req, res, next) => {
   var nb = req.params.nb;
   var deadCharacterIds = JSON.parse(req.body.deadCharacterIds);
 

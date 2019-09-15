@@ -1,12 +1,16 @@
 const express = require('express');
-const Router = express.Router();
+const router = express.Router();
 const Character = require('../models/character');
 const Season = require('../models/season');
+
+const checkAuthUser = require('../middleware/check-auth').checkAuthUser;
+const checkAuthAdmin = require('../middleware/check-auth').checkAuthAdmin;
 
 // GET Request
 // '/characters'
 // retrieve all characters
-Router.get('/', (req, res, next) => {
+// No auth
+router.get('/', checkAuthUser,(req, res, next) => {
   Character.find({})
     .select("firstName lastName")
     .exec((err, charactersArray) => {
@@ -25,8 +29,8 @@ Router.get('/', (req, res, next) => {
 // GET Request
 // '/characters/:id'
 // retrieve a character
-Router.get('/:id',
-  (req, res, next) => {
+// No auth
+router.get('/:id',checkAuthUser,(req, res, next) => {
     var id = req.params.id;
     Character.findById(id)
       .exec((err, character) => {
@@ -71,7 +75,8 @@ Router.get('/:id',
 // POST Request
 // '/characters'
 // create a character
-Router.post('/', (req, res, next) => {
+// User auth
+router.post('/', checkAuthUser,(req, res, next) => {
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
 
@@ -115,7 +120,8 @@ Router.post('/', (req, res, next) => {
 // DELETE Request
 // '/characters/:id'
 // delete a character
-Router.delete('/:id', (req, res, next) => {
+// Admin auth
+router.delete('/:id',checkAuthAdmin,(req, res, next) => {
   var id = req.params.id;
   Character.findByIdAndRemove(id)
     .exec((err, character) => {
@@ -138,4 +144,4 @@ Router.delete('/:id', (req, res, next) => {
     });
 });
 
-module.exports = Router;
+module.exports = router;
