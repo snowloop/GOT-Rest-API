@@ -15,13 +15,23 @@ Promises, Then and Catch Methods are used for the users routes.
 
 # Architecture
 #### Characters routes
-GET /characters   => Retrieve all characters.
+```
+GET /characters
+```
+=> Retrieve all characters.
+```
+GET /characters/:id
+```
+=> Retrieve a single character.
+```
+POST /characters
+```
+=> [Auth needed] Create a character.
 
-GET /characters/:id => Retrieve a single character.
-
-POST /characters => Create a character.
-
-DELETE /characters/:id => Delete a character.
+```
+DELETE /characters/:id
+```
+=> [Auth needed, Admin reserved]Delete a character.
 
 #### Season routes
  GET /seasons => Retrieve all seasons.
@@ -42,12 +52,12 @@ POST /users/login
 ```
 GET /users
 ```
-=> Retrieve all user emails
+=> [Auth needed, Admin reserved] Retrieve all user emails
 
 ```
 DELETE /users/:email
 ```
-=> Delete a user
+=> [Auth needed, Admin reserved] Delete a user
 
 # Character Object
 
