@@ -80,7 +80,6 @@ deathSeason : Number
 # Season Object
 ```javascript
 {
-  id: String,
   number : Number,
   deadCharacters : {
     id : String
