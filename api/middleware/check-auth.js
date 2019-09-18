@@ -29,8 +29,9 @@ const checkAuthUser = (req, res, next) => {
 const checkAuthAdmin = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-
+    
     JWT.verify(token, process.env.JWT_KEY, (err, result) => {
+      console.log(result)
       if (err || !result.isAdmin) {
         res.status(401).json({
           message: "Unauthorized"

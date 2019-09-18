@@ -1,8 +1,5 @@
-const express = require('express');
-const router = express.Router();
-const Character = require('../models/character');
-const Season = require('../models/season');
-
+const router = require('express').Router();
+const CharacterController = require('../controllers/characters');
 const checkAuthUser = require('../middleware/check-auth').checkAuthUser;
 const checkAuthAdmin = require('../middleware/check-auth').checkAuthAdmin;
 
@@ -10,138 +7,24 @@ const checkAuthAdmin = require('../middleware/check-auth').checkAuthAdmin;
 // '/characters'
 // retrieve all characters
 // No auth
-router.get('/', checkAuthUser,(req, res, next) => {
-  Character.find({})
-    .select("firstName lastName")
-    .exec((err, charactersArray) => {
-      if (err) {
-        next(err);
-      } else {
-        var charactersObject = {};
-        charactersArray.forEach((character) => {
-          charactersObject[character.id] = character.firstName + " " + character.lastName
-        });
-        res.status(200).json(charactersObject);
-      };
-    });
-});
+router.get('/',CharacterController.getAllCharacters);
 
 // GET Request
 // '/characters/:id'
 // retrieve a character
 // No auth
-router.get('/:id',checkAuthUser,(req, res, next) => {
-    var id = req.params.id;
-    Character.findById(id)
-      .exec((err, character) => {
-        if (err && err.name === "CastError") {
-          res.status(422).json({
-            message: "Id parameter has not the right format"
-          })
-        } else if (err) {
-          next(err);
-        } else if (!season) {
-          res.status(404).json({
-            message: "No character with this id."
-          })
-        } else {
-          Season.findOne({
-              'deadCharacters': id
-            })
-            .select("number")
-            .exec((err, season) => {
-              if (err) {
-                next(err);
-              } else if (season) {
-                res.status(200).json({
-                  id: character.id,
-                  firstName: character.firstName,
-                  lastName: character.lastName,
-                  deathSeason: season.number
-                });
-              } else {
-                res.status(200).json({
-                  id: character.id,
-                  firstName: character.firstName,
-                  lastName: character.lastName,
-                  deathSeason: undefined
-                });
-              }
-            })
-        }
-      });
-  });
+router.get('/:id',CharacterController.getCharacter);
 
 // POST Request
 // '/characters'
 // create a character
 // User auth
-router.post('/', checkAuthUser,(req, res, next) => {
-  var firstName = req.body.firstName;
-  var lastName = req.body.lastName;
-
-  if (!firstName || !lastName) {
-    res.status(422).json({
-      message: 'missing parameters'
-    });
-  } else {
-    Character.findOne({
-        firstName: firstName,
-        lastName: lastName
-      })
-      .exec((err, character) => {
-        if (err) {
-          next(err);
-        } else if (character) {
-          res.status(409).json({
-            message: 'Character already exists'
-          })
-        } else {
-          let character = new Character({
-            firstName: firstName,
-            lastName: lastName
-          });
-
-          character.save((err, character) => {
-            if (err) {
-              next(err);
-            } else {
-              res.status(201).json({
-                message: 'Character created',
-                characterId: character.id
-              })
-            }
-          })
-        }
-      });
-  }
-});
+router.post('/', checkAuthUser,CharacterController.createCharater);
 
 // DELETE Request
 // '/characters/:id'
 // delete a character
 // Admin auth
-router.delete('/:id',checkAuthAdmin,(req, res, next) => {
-  var id = req.params.id;
-  Character.findByIdAndRemove(id)
-    .exec((err, character) => {
-      if (err && err.name === 'CastError') {
-        res.status(422).json({
-          message: "Id parameter has not the right format"
-        });
-      } else if (err) {
-        next(err);
-      } else if (!season) {
-        res.status(404).json({
-          message: "No season with this id."
-        })
-      } else {
-        res.status(200).json({
-          'message': 'Character deleted',
-          'character': character
-        });
-      }
-    });
-});
+router.delete('/:id',checkAuthAdmin,CharacterController.deleteCharacter);
 
 module.exports = router;
