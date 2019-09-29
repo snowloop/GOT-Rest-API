@@ -27,7 +27,7 @@ exports.getCharacter = (req, res, next) => {
           })
         } else if (err) {
           next(err);
-        } else if (!season) {
+        } else if (!character) {
           res.status(404).json({
             message: "No character with this id."
           })
