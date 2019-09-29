@@ -10,7 +10,6 @@ const app = express();
 const mongoose = require('mongoose');
 
 
-if(process.env.TRYTOCONNECT === "TRUE"){
 mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
     useNewUrlParser: true,
     useFindAndModify: false
@@ -20,7 +19,6 @@ mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
   }).catch((err) => {
     console.log('Error during connection :' + err)
   });
-}
 
 // Logging Tool
 app.use(morgan('dev'));
