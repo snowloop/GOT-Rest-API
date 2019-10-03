@@ -9,8 +9,8 @@ const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
 
-
-mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD), {
+uri = uri.replace('<password>', process.env.DB_PASSWORD).replace('<user>',process.env.DB_USER)
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useFindAndModify: false
   })
