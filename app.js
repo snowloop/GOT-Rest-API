@@ -9,8 +9,8 @@ const uri = require('./config/keys').uri;
 const app = express();
 const mongoose = require('mongoose');
 
-uri = uri.replace('<password>', process.env.DB_PASSWORD).replace('<user>',process.env.DB_USER)
-mongoose.connect(uri, {
+
+mongoose.connect(uri.replace('<password>', process.env.DB_PASSWORD).replace('<user>',process.env.DB_USER), {
     useNewUrlParser: true,
     useFindAndModify: false
   })
@@ -40,6 +40,16 @@ app.use((req, res, next) => {
     res.status(200).json({});
   }
   next();
+})
+// Welcome URL
+app.get('/',(req,res)=>{
+  res.status(200).json({
+    message: "Welcome to the GOT API Characters ! Visit the github repo for more information about this api",
+     githublink: "https://github.com/AlexaJosse/Nodejs-GOT-API",
+     mylinkedinpage :"https://www.linkedin.com/in/alexandrejosse/",
+    GETcharacters : "http://localhost:3000/characters",
+    GETseasons : "http://localhost:3000/seasons"
+  })
 })
 
 // Characters Routes
