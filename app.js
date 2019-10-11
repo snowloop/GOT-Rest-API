@@ -47,8 +47,8 @@ app.get('',(req,res)=>{
     message: "Welcome to the GOT API Characters ! Visit the github repo for more information about this api",
      githublink: "https://github.com/AlexaJosse/Nodejs-GOT-API",
      mylinkedinpage :"https://www.linkedin.com/in/alexandrejosse/",
-    GETcharacters : "http://localhost:3000/characters",
-    GETseasons : "http://localhost:3000/seasons"
+    GETcharacters : "http://agirlhasaname.herokuapp.com/characters",
+    GETseasons : "http://agirlhasaname.herokuapp.com/seasons"
   })
 })
 
