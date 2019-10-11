@@ -42,7 +42,7 @@ app.use((req, res, next) => {
   next();
 })
 // Welcome URL
-app.get('/',(req,res)=>{
+app.get('',(req,res)=>{
   res.status(200).json({
     message: "Welcome to the GOT API Characters ! Visit the github repo for more information about this api",
      githublink: "https://github.com/AlexaJosse/Nodejs-GOT-API",
